@@ -174,7 +174,10 @@
 	"boot_fit;"
 #else
 #define RKIMG_BOOTCOMMAND			\
-	"boot_android ${devtype} ${devnum};"	\
+	"if test $ENV_SAVED -eq 0; then " \
+		"setenv ENV_SAVED 1; saveenv;" \
+	"fi;" \
+	"boot_android ${devtype} ${devnum};"    \
 	"boot_fit;"				\
 	"bootrkp;"				\
 	"run distro_bootcmd;"
