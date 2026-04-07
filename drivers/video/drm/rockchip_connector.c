@@ -87,6 +87,9 @@ static int rockchip_connector_path_init(struct rockchip_connector *conn,
 	if (conn->bridge)
 		rockchip_bridge_init(conn->bridge, conn, state);
 
+	if (!conn->panel && !conn->bridge && !conn->funcs->detect)
+		return -ENODEV;
+
 	if (conn->funcs->init) {
 		ret = conn->funcs->init(conn, state);
 		if (ret)

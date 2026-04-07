@@ -1548,6 +1548,8 @@ void rockchip_show_fbbase(ulong fbbase)
 	struct display_state *s;
 
 	list_for_each_entry(s, &rockchip_display_list, head) {
+		if (display_init(s) || !s->is_init)
+			continue;
 		s->logo.mode = ROCKCHIP_DISPLAY_FULLSCREEN;
 		s->logo.mem = (char *)fbbase;
 		s->logo.width = DRM_ROCKCHIP_FB_WIDTH;
@@ -1588,6 +1590,9 @@ int rockchip_show_logo(void)
 	int count = 0;
 
 	list_for_each_entry(s, &rockchip_display_list, head) {
+		if (display_init(s) || !s->is_init)
+			continue;
+
 		s->logo.mode = s->logo_mode;
 		s->logo.rotate = s->logo_rotate;
 		if (load_bmp_logo(&s->logo, s->ulogo_name)) {
